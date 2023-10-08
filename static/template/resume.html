@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>简历</title>
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon"/>
+    <link href="/static/css/common.css" rel="stylesheet" type="text/css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/resume.js"></script>
+</head>
+<body>
+    <div id="outer">
+        <center><strong id="resume"><span style="margin-right: 3vw">简</span><span style="margin-left: 3vw">历</span></strong></center>
+
+        <div id="personMsgTitle" class="title">个人信息</div>
+        <div style="overflow: hidden">
+            <span id="msg">
+                <span id="name">
+                    姓名：{{.resume.PersonName}}
+                </span>
+                <span id="birthday">
+                    出生日期：{{.resume.Birthday}}
+                </span>
+                <span id="nativePlace">
+                    籍贯：{{.resume.NativePlace}}
+                </span>
+                <span id="sex">
+                    性别：{{.resume.Sex}}
+                </span>
+                <span id="email">
+                    电子邮箱：{{.resume.Email}}
+                </span>
+                <span id="phone">
+                    电话：{{.resume.Phone}}
+                </span>
+            </span>
+            <span>
+                <img id="avatar" src="" alt="头像">
+            </span>
+        </div>
+
+
+        <div id="educationTitle" class="title">教育背景</div>
+        <div id="education">
+            {{range $i, $v := .resume.Educations}}
+            <li  class="education">
+                <span>{{$v.Time}}</span>
+                <span>{{$v.SchoolName}}</span>
+                <span>{{$v.Profession}}</span>
+            </li>
+            {{end}}
+        </div>
+
+        <div id="jobIntentionTitle" class="title">求职意向</div>
+        <div id="jobIntention">
+            {{.resume.JobIntentionContent}}
+        </div>
+
+
+        <div id="skillsTitle" class="title">专业技能</div>
+        <div id="skills">
+            {{range $i, $v := .resume.Skills}}
+                <div>
+                    <span class="listTitle">{{$v.SkillTitle}}</span>
+                    <ul>
+                        {{range $i1, $v1 := $v.SkillContents}}
+                            <li>{{$v1}}</li>
+                        {{end}}
+                    </ul>
+                </div>
+            {{end}}
+        </div>
+
+
+        <div id="practiceTitle" class="title">实习经历</div>
+        <div id="practice">
+
+        </div>
+
+
+        <div id="projectsTitle" class="title">项目经历</div>
+        <div id="projects">
+            {{range $i, $v := .resume.Projects}}
+                <div>
+                    <div class="listBigTitle">项目名称：{{$v.ProjectName}}</div>
+                    <div class="listTitle">一、项目介绍</div>
+                    <div>
+                        {{range $i1, $v1 := $v.ProjectDescription}}
+                            <div class="text">{{$v1}}</div>
+                        {{end}}
+                    </div>
+                    <div class="listTitle">二、技术框架</div>
+                    <div>
+                        <ul>
+                            {{range $i1, $v1 := $v.ProjectTechnology}}
+                                <li>{{$v1}}</li>
+                            {{end}}
+                        </ul>
+                    </div>
+                    <div class="listTitle">三、实现流程</div>
+                    <div>
+                        <ul>
+                            {{range $i2, $v2 := $v.ProjectProcess}}
+                                <div>
+                                    <li class="listTitle">{{$v2.ProjectProcessTitle}}</li>
+                                    {{range $i3, $v3 := $v2.ProjectProcessContent}}
+                                    <div class="text">{{$v3}}</div>
+                                    {{end}}
+                                </div>
+                            {{end}}
+                        </ul>
+                    </div>
+                    <div class="listTitle">四、项目收获</div>
+                    <div>
+                        {{range $i1, $v1 := $v.Harvest}}
+                            <div class="text">{{$v1}}</div>
+                        {{end}}
+                    </div>
+                </div>
+            {{end}}
+        </div>
+
+
+        <div id="evaluationTitle" class="title">自我评价</div>
+        <div id="evaluation" class="text">
+            {{range $i, $v := .resume.EvaluationContent}}
+                <div class="text">{{$v}}</div>
+            {{end}}
+        </div>
+    </div>
+<script>
+    $("#avatar").prop("src", "{{.resume.AvatarName}}")
+</script>
+</body>
+</html>

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>生成简历</title>
+    <link rel="icon" href="/static/img/favicon.ico" type="image/x-icon"/>
+    <link href="/static/css/common.css" rel="stylesheet" type="text/css">
+    <link href="/static/css/msg.css" rel="stylesheet" type="text/css">
+    <script src="/static/js/jquery.js"></script>
+    <script src="/static/js/msg.js"></script>
+
+</head>
+<body>
+<div id="outer">
+    <center><strong id="resume"><span style="margin-right: 3vw">简</span><span style="margin-left: 3vw">历</span></strong></center>
+
+    <div id="personMsgTitle" class="title">个人信息</div>
+    <div style="overflow: hidden">
+            <span id="msg">
+                <span id="name">
+                    姓名：<input type="text" class="shortText" id="nameText" value="{{.resume.PersonName}}">
+                </span>
+                <span id="birthday">
+                    出生日期：<input type="text" class="shortText" id="birthdayText" value="{{.resume.Birthday}}">
+                </span>
+                <span id="nativePlace">
+                    籍贯：<input type="text" class="shortText" id="nativePlaceText" value="{{.resume.NativePlace}}">
+                </span>
+                <span id="sex">
+                    性别：<input type="text" class="shortText" id="sexText" value="{{.resume.Sex}}">
+                </span>
+                <span id="email">
+                    电子邮箱：<input type="text" class="shortText" id="emailText" value="{{.resume.Email}}">
+                </span>
+                <span id="phone">
+                    电话：<input type="text" class="shortText" id="phoneText" value="{{.resume.Phone}}">
+                </span>
+            </span>
+            <span>
+                <input id="avatarFile" type="file" accept="image/png,image/jpeg" style="display: none" onchange="changeAvatar()">
+                <button onclick="selectAvatar()">选择头像</button>
+                <img id="avatar" src="" alt="头像">
+            </span>
+    </div>
+
+
+    <div id="educationTitle" class="title">教育背景</div>
+    <div id="education">
+        {{range $i, $v := .resume.Educations}}
+            <li  class="education education{{$i}}">
+                <div>
+                    起止时间：<input class="shortText timeText" type="text" value="{{$v.Time}}">
+                </div>
+                <div>
+                    学校：<input class="shortText schoolText" type="text" value="{{$v.SchoolName}}">
+                </div>
+                <div>
+                    专业：<input class="shortText professionText" type="text" value="{{$v.Profession}}">
+                </div>
+                <button class="del" onclick="del('education{{$i}}')" style="max-width: 130px">
+                    删除该条教育背景
+                </button>
+            </li>
+        {{end}}
+    </div>
+    <center>
+        <button class="add mainAdd" onclick="add(1)" title="新添加一列">添加教育背景</button>
+    </center>
+
+    <div id="jobIntentionTitle" class="title">求职意向</div>
+    <div id="jobIntention">
+        <input style="max-width: 100vw;width: 95%;margin-top: 30px" type="text" id="jobIntentionText" value="{{.resume.JobIntentionContent}}">
+    </div>
+
+
+    <div id="skillsTitle" class="title">专业技能</div>
+    <div id="skills">
+        {{range $i, $v := .resume.Skills}}
+            <div class="listTitle{{$i}}">
+                <input type="text" class="listTitle shortText" value="{{$v.SkillTitle}}">
+                <button class="del" onclick="del('listTitle{{$i}}')">
+                    删除该条专业技能
+                </button>
+                <ul class="skillContentsOuter{{$i}}">
+                    {{range $i1, $v1 := $v.SkillContents}}
+                        <li class="skillContents{{$i}}{{$i1}}" style="margin-top: 20px">
+                            <input type="text" class="longText" value="{{$v1}}">
+                            <button class="del" onclick="del('skillContents{{$i}}{{$i1}}')">
+                                删除本行
+                            </button>
+                        </li>
+                    {{end}}
+                </ul>
+                <button class="add" onclick="add(3, 'skillContentsOuter{{$i}}')" title="新添加一列" style="margin-left: 30px">添加一行</button>
+            </div>
+        {{end}}
+    </div>
+    <center>
+        <button class="add mainAdd" onclick="add(2)" title="新添加一列">添加专业技能</button>
+    </center>
+
+
+    <div id="practiceTitle" class="title">实习经历</div>
+    <div id="practice">
+
+    </div>
+
+
+    <div id="projectsTitle" class="title">项目经历</div>
+    <div id="projects">
+        {{range $i, $v := .resume.Projects}}
+            <div class="project{{$i}}">
+                <div class="listBigTitle">
+                    项目名称：<input class="shortText" type="text" value="{{$v.ProjectName}}">
+                    <button class="del" onclick="del('project{{$i}}')">删除该条项目经历</button>
+                </div>
+                <div class="listTitle">一、项目介绍</div>
+                <div>
+                    {{range $i1, $v1 := $v.ProjectDescription}}
+                        <div class="projectDescription{{$i}}{{$i1}}">
+                            <input class="longText"  type="text" value="{{$v1}}">
+                            <button class="del" onclick="del('projectDescription{{$i}}{{$i1}}')">
+                                删除该条项目介绍
+                            </button>
+                        </div>
+                    {{end}}
+                </div>
+                <div class="listTitle">二、技术框架</div>
+                <div>
+                    <ul class="projectTechnologyOuter{{$i}}">
+                        {{range $i1, $v1 := $v.ProjectTechnology}}
+                            <li class="projectTechnology{{$i}}{{$i1}}">
+                                <input class="longText" type="text" value="{{$v1}}">
+                                <button class="del" onclick="del('projectTechnology{{$i}}{{$i1}}')">
+                                    删除该条技术框架
+                                </button>
+                            </li>
+                        {{end}}
+                    </ul>
+                    <center>
+                        <button class="add" onclick="add(5, 'projectTechnologyOuter{{$i}}')" title="新添加一列">添加技术框架</button>
+                    </center>
+                </div>
+                <div class="listTitle">三、实现流程</div>
+                <div>
+                    <ul class="projectProcessOuter{{$i}}">
+                        {{range $i1, $v1 := $v.ProjectProcess}}
+                            <div class="projectProcess{{$i}}{{$i1}}">
+                                <li style="margin-top: 20px">
+                                    <input type="text" class="shortText" value="{{$v1.ProjectProcessTitle}}">
+                                    <button class="del" onclick="del('projectProcess{{$i}}{{$i1}}')">
+                                        删除该条实现流程
+                                    </button>
+                                </li>
+                                <div class="projectProcessContentOuter{{$i}}">
+                                    {{range $i2, $v2 := $v1.ProjectProcessContent}}
+                                        <div class="text projectProcessContent{{$i}}{{$i1}}{{$i2}}">
+                                            <input type="text" class="longText" value="{{$v2}}">
+                                            <button class="del" onclick="del('projectProcessContent{{$i}}{{$i1}}{{$i2}}')">
+                                                删除该行
+                                            </button>
+                                        </div>
+                                    {{end}}
+                                </div>
+                                <button class="add" onclick="add(6, 'projectProcessContentOuter{{$i}}')" title="新添加一列" style="margin-left: 30px">添加一行</button>
+                            </div>
+                        {{end}}
+                    </ul>
+                </div>
+                <center>
+                    <button class="add" onclick="add(7, 'projectProcessOuter{{$i}}')" title="新添加一列">添加实现流程</button>
+                </center>
+                <div class="listTitle">四、项目收获</div>
+                <div class="harvestOuter${count}">
+                    {{range $i1, $v1 := $v.Harvest}}
+                        <div class="harvest{{$i}}{{$i1}}">
+                            <input class="longText" type="text" value="{{$v1}}">
+                            <button class="del" onclick="del('harvest{{$i}}{{$i1}}')">
+                                删除该条项目收获
+                            </button>
+                        </div>
+                    {{end}}
+                </div>
+                <center>
+                    <button class="add" onclick="add(8, 'harvestOuter{{$i}}')" title="新添加一列">添加项目收获</button>
+                </center>
+            </div>
+        {{end}}
+    </div>
+    <center>
+        <button class="add mainAdd" onclick="add(4)" title="新添加一列">添加项目经历</button>
+    </center>
+
+
+    <div id="evaluationTitle" class="title">自我评价</div>
+    <div id="evaluation">
+        {{range $i, $v := .resume.EvaluationContent}}
+            <div class="evaluation{{$i}}">
+                <input class="longText" id="evaluationText" type="text" value="{{$v}}">
+                <button class="del" onclick="del('evaluation{{$i}}')">
+                    删除该条自我评价
+                </button>
+            </div>
+        {{end}}
+    </div>
+    <center>
+        <button class="add mainAdd" onclick="add(9, 'projectProcessOuter${count}')" title="新添加一列">添加自我评价</button>
+    </center>
+    <div id="control">
+        <button class="mainAdd" style="margin-top: 100px;height: 30px;max-width: 70px" onclick="save()">保存简历</button>
+        <button class="mainAdd" style="margin-top: 100px;height: 30px;max-width: 70px" onclick="preview()">预览简历</button>
+    </div>
+</div>
+<script>
+    $("#avatar").prop("src", "{{.resume.AvatarName}}")
+</script>
+</body>
+</html>

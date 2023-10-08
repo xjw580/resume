@@ -1,0 +1,55 @@
+#resume{
+    color: #647bed;
+    font-size: 25px
+}
+#outer{
+    width: 100%;
+    position: absolute;
+}
+#msg{
+    width: 70%;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-gap: 30px;
+    float: left;
+    margin-right: 13%;
+}
+#avatar{
+    width: 110px;
+}
+.title{
+    background-color: rgba(235, 237, 238, 0.84);
+    padding: 10px;
+    border-radius: 0.3rem;
+    margin-top: 35px;
+    margin-bottom: 10px;
+    font-size: 19px;
+    font-weight: bold;
+    color: cornflowerblue;
+}
+hr{
+    border: 1px solid rgba(100, 102, 237, 0.63);
+}
+.listTitle{
+    margin-top: 20px;
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+.listBigTitle{
+    margin-top: 25px;
+    margin-bottom: 5px;
+    font-weight: bold;
+    font-size: 17px;
+}
+.text{
+    text-indent:2em;
+    margin-bottom: 5px;
+}
+.education{
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    margin-top: 15px;
+}
+*{
+    font-family: 'Arial', sans-serif;
+}
